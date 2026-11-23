@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f8fc">
+  <meta name="description" content="Acompanhamento de propriedades, viveiros e qualidade da água.">
+  <meta name="api-base-url" content="/api">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
+  <title>AquaManejo | Gestão aquícola</title>
+  <link rel="stylesheet" href="css/main.css">
+  <script src="js/api.js" defer></script>
+  <script src="js/main.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Pular para o conteúdo</a>
+  <section class="auth-gate" id="authGate" aria-labelledby="authTitle" hidden>
+    <div class="auth-card">
+      <a class="brand auth-brand" href="#dashboard"><span class="brand-mark" aria-hidden="true">⌁</span><span class="brand-copy"><strong>Aqua<span>Manejo</span></strong><small>GESTÃO AQUÍCOLA</small></span></a>
+      <p class="eyebrow">ACESSO SEGURO</p><h1 id="authTitle">Entre na sua conta</h1>
+      <p class="page-subtitle" id="authDescription">Acesse os dados da sua operação aquícola.</p>
+      <form id="loginForm" class="auth-form">
+        <label class="field"><span>E-mail</span><input name="email" type="email" autocomplete="username" required maxlength="254"></label>
+        <label class="field"><span>Senha</span><input name="password" type="password" autocomplete="current-password" required maxlength="128"></label>
+        <button class="button button-primary" type="submit">Entrar</button>
+      </form>
+      <form id="registerForm" class="auth-form" hidden>
+        <label class="field"><span>Nome</span><input name="name" autocomplete="name" required maxlength="120"></label>
+        <label class="field"><span>E-mail</span><input name="email" type="email" autocomplete="email" required maxlength="254"></label>
+        <label class="field"><span>Senha (mínimo 12 caracteres)</span><input name="password" type="password" autocomplete="new-password" required minlength="12" maxlength="128"></label>
+        <button class="button button-primary" type="submit">Criar conta</button>
+      </form>
+      <p class="auth-feedback" id="authFeedback" role="status" aria-live="polite"></p>
+      <button class="text-button auth-switch" id="authSwitch" type="button">Criar uma conta</button>
+    </div>
+  </section>
+  <div class="app-shell" id="appShell" hidden>
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+    <aside class="sidebar" id="sidebar" aria-label="Navegação principal">
+      <a class="brand" href="#dashboard" aria-label="AquaManejo, início" data-screen-link="dashboard">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 40 40" fill="none"><path d="M20 4.5C15.8 11.2 9 17.7 9 24.3a11 11 0 0 0 22 0C31 17.7 24.2 11.2 20 4.5Z" fill="currentColor"/><path d="M13.8 25.8c1 3.1 3.1 4.7 6.4 4.8" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>
+        </span>
+        <span class="brand-copy"><strong>Aqua<span>Manejo</span></strong><small>GESTÃO AQUÍCOLA</small></span>
+      </a>
+
+      <div class="workspace-switcher">
+          <span class="workspace-avatar" aria-hidden="true">FA</span>
+        <span class="workspace-name"><strong>Minha operação</strong><small>Carregando conta…</small></span>
+        <span class="chevron" aria-hidden="true">⌄</span>
+      </div>
+
+      <p class="nav-label">MENU PRINCIPAL</p>
+      <nav class="primary-nav" aria-label="Menu principal">
+        <button class="nav-item active" type="button" data-screen="dashboard" aria-current="page"><span class="nav-icon" aria-hidden="true">▦</span><span>Painel geral</span></button>
+        <button class="nav-item" type="button" data-screen="properties"><span class="nav-icon" aria-hidden="true">⌂</span><span>Propriedades</span><span class="nav-count" id="propertyCount">2</span></button>
+        <button class="nav-item" type="button" data-screen="ponds"><span class="nav-icon" aria-hidden="true">▤</span><span>Viveiros e tanques</span></button>
+        <button class="nav-item" type="button" data-screen="record"><span class="nav-icon" aria-hidden="true">＋</span><span>Registrar medição</span></button>
+        <button class="nav-item" type="button" data-screen="history"><span class="nav-icon" aria-hidden="true">◷</span><span>Histórico</span></button>
+        <button class="nav-item" type="button" data-screen="reports"><span class="nav-icon" aria-hidden="true">▥</span><span>Gráficos e relatórios</span></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="help-card">
+          <span class="help-symbol" aria-hidden="true">i</span>
+          <strong>Análises rastreáveis</strong>
+          <p>As classificações dependem de fonte técnica, espécie e contexto compatíveis.</p>
+        </div>
+        <button class="nav-item settings-nav" type="button" data-screen="settings"><span class="nav-icon" aria-hidden="true">⚙</span><span>Configurações</span></button>
+        <div class="sidebar-user">
+          <span class="user-avatar" aria-hidden="true">—</span>
+          <span class="workspace-name"><strong>Conta</strong><small>Produtor aquícola</small></span>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-area" id="mainContent" tabindex="-1">
+      <header class="topbar">
+        <button class="mobile-menu-button" id="mobileMenuButton" type="button" aria-label="Abrir menu" aria-controls="sidebar" aria-expanded="false"><span></span><span></span><span></span></button>
+        <div class="breadcrumbs"><span>Minha operação</span><span class="breadcrumb-separator">/</span><strong id="currentSection">Painel geral</strong></div>
+        <div class="topbar-actions">
+          <span class="demo-pill" id="environmentPill"><span></span> Dados reais</span>
+          <span class="topbar-date" id="todayLabel"></span>
+          <button class="text-button" id="logoutButton" type="button">Sair</button>
+        </div>
+      </header>
+
+      <div class="page-content">
+        <div class="demo-notice" hidden><span aria-hidden="true">ⓘ</span><p><strong>Ambiente demonstrativo.</strong> Nenhum dado operacional está pré-carregado.</p><button type="button" class="notice-close" aria-label="Fechar aviso">×</button></div>
+
+        <section class="page-section is-visible" id="page-dashboard" data-page="dashboard" aria-labelledby="dashboardTitle">
+          <div class="page-heading heading-with-action">
+            <div><p class="eyebrow" id="dashboardDateLabel"></p><h1 id="dashboardTitle">Painel aquícola <span class="wave">✦</span></h1><p class="page-subtitle">Acompanhe o resumo da sua operação aquícola.</p></div>
+            <button class="button button-primary" type="button" data-go="record"><span class="button-plus">＋</span> Registrar medição</button>
+          </div>
+
+          <div class="metric-grid">
+            <article class="metric-card"><div class="metric-top"><span class="metric-icon icon-blue">⌂</span><span class="metric-trend neutral">Banco de dados</span></div><p class="metric-label">Propriedades</p><div class="metric-value" id="metricProperties">0</div><p class="metric-foot">da sua conta</p><span class="metric-decoration decor-blue" aria-hidden="true"></span></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-icon icon-teal">▤</span><span class="metric-trend neutral">Banco de dados</span></div><p class="metric-label">Viveiros e tanques</p><div class="metric-value" id="metricPonds">0</div><p class="metric-foot">em suas propriedades</p><span class="metric-decoration decor-teal" aria-hidden="true"></span></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-icon icon-orange">⌁</span><span class="metric-trend neutral">Banco de dados</span></div><p class="metric-label">Medições registradas</p><div class="metric-value" id="metricReadings">0</div><p class="metric-foot">histórico completo</p><span class="metric-decoration decor-orange" aria-hidden="true"></span></article>
+            <article class="metric-card"><div class="metric-top"><span class="metric-icon icon-purple">◷</span><span class="metric-trend neutral">Análise</span></div><p class="metric-label">Última medição</p><div class="metric-value" id="metricPeriod">0</div><p class="metric-foot">referências dependem do contexto informado</p><span class="metric-decoration decor-purple" aria-hidden="true"></span></article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel chart-panel">
+              <div class="panel-heading"><div><h2>Variação dos parâmetros</h2><p>Medições reais registradas</p></div><label class="select-wrap"><span class="sr-only">Parâmetro do gráfico</span><select id="dashboardParameter"></select></label></div>
+              <div class="chart-summary"><strong id="chartValue">Sem medições</strong><span class="chart-period">Série registrada</span></div>
+              <div class="chart-wrap"><canvas id="dashboardChart" role="img" aria-label="Gráfico de medições reais" aria-describedby="dashboardChartDescription"></canvas></div><p class="sr-only" id="dashboardChartDescription"></p>
+              <div class="chart-legend"><span><i class="legend-dot blue-dot"></i><span id="chartLegend">Parâmetro</span></span><small>Dados do banco</small></div>
+            </article>
+
+            <article class="panel pond-summary-panel">
+              <div class="panel-heading"><div><h2>Visão dos viveiros</h2><p>Resumo das estruturas cadastradas</p></div><button class="text-button" type="button" data-go="ponds">Ver todos <span>→</span></button></div>
+              <div class="pond-list" id="dashboardPondList"></div>
+              <div class="panel-footnote"><span class="status-dot status-dot-blue"></span> As análises indicam fonte e contexto utilizados</div>
+            </article>
+          </div>
+
+          <div class="dashboard-lower-grid">
+            <article class="panel table-panel">
+              <div class="panel-heading"><div><h2>Últimas medições</h2><p>Registros recentes do banco de dados</p></div><button class="text-button" type="button" data-go="history">Ver histórico <span>→</span></button></div>
+              <div class="table-scroll" role="region" tabindex="0" aria-label="Últimas medições"><table><caption class="sr-only">Medições recentes registradas</caption><thead><tr><th scope="col">PARÂMETRO</th><th scope="col">VIVEIRO</th><th scope="col">VALOR</th><th scope="col">DATA E HORA</th><th scope="col">ANÁLISE</th></tr></thead><tbody id="recentMeasurements"></tbody></table></div>
+            </article>
+            <article class="panel shortcut-panel"><div class="panel-heading"><div><h2>Acesso rápido</h2><p>Atalhos para tarefas comuns</p></div></div><button class="shortcut-row" type="button" data-go="record"><span class="shortcut-icon shortcut-blue">＋</span><span><strong>Nova medição</strong><small>Registrar parâmetros da água</small></span><b>→</b></button><button class="shortcut-row" type="button" data-go="ponds"><span class="shortcut-icon shortcut-cyan">▤</span><span><strong>Novo viveiro</strong><small>Adicionar estrutura de cultivo</small></span><b>→</b></button><button class="shortcut-row" type="button" data-go="reports"><span class="shortcut-icon shortcut-violet">▥</span><span><strong>Ver relatórios</strong><small>Explorar medições registradas</small></span><b>→</b></button></article>
+          </div>
+        </section>
+
+        <section class="page-section" id="page-properties" data-page="properties" aria-labelledby="propertiesTitle" hidden>
+          <div class="page-heading"><p class="eyebrow">SUA OPERAÇÃO</p><h1 id="propertiesTitle">Propriedades</h1><p class="page-subtitle">Organize os locais onde ficam seus viveiros e tanques.</p></div>
+          <div class="form-and-aside-grid">
+            <form class="panel form-panel" id="propertyForm" novalidate><div class="form-heading"><span class="form-step">01</span><div><h2>Cadastrar propriedade</h2><p>Preencha as informações principais do local.</p></div></div><div class="form-grid"><label class="field field-full"><span>Nome da propriedade <b>*</b></span><input name="name" type="text" placeholder="Ex.: Sítio Boa Vista" required maxlength="120"><small>Um nome fácil de identificar na sua rotina.</small></label><label class="field"><span>Município</span><input name="city" type="text" placeholder="Ex.: Piracicaba" maxlength="100"></label><label class="field"><span>Estado</span><input name="state" type="text" placeholder="Ex.: SP" maxlength="80"></label><label class="field"><span>Área total (hectares)</span><div class="input-with-unit"><input name="area" type="number" min="0.01" step="0.01" placeholder="0,00"><span>ha</span></div></label></div><div class="form-actions"><span class="required-hint">Nome obrigatório</span><button class="button button-primary" type="submit">Adicionar propriedade →</button></div></form>
+            <aside class="panel side-info-panel"><span class="info-illustration" aria-hidden="true">⌂</span><h2>Seu espaço de produção</h2><p>Cadastre cada propriedade para manter viveiros, tanques e medições organizados por local.</p><div class="info-stat"><strong id="propertyScreenCount">0</strong><span>propriedades cadastradas</span></div><div class="info-tip"><span>✦</span><p>Os dados são associados à conta autenticada.</p></div></aside>
+          </div>
+          <div class="section-title-row"><div><h2>Propriedades cadastradas</h2><p id="propertyListDescription">Carregando…</p></div></div><div class="property-card-grid" id="propertyCards"></div>
+        </section>
+
+        <section class="page-section" id="page-ponds" data-page="ponds" aria-labelledby="pondsTitle" hidden>
+          <div class="page-heading"><p class="eyebrow">ESTRUTURAS DE CULTIVO</p><h1 id="pondsTitle">Viveiros e tanques</h1><p class="page-subtitle">Cadastre as estruturas para organizar suas medições.</p></div>
+          <form class="panel form-panel compact-form" id="pondForm" novalidate><div class="form-heading"><span class="form-step">02</span><div><h2>Adicionar estrutura</h2><p>Informe o contexto de cultivo para permitir análises compatíveis.</p></div></div><div class="form-grid"><label class="field"><span>Nome da estrutura <b>*</b></span><input name="name" type="text" placeholder="Ex.: Viveiro 05" required maxlength="120"></label><label class="field"><span>Propriedade <b>*</b></span><select name="propertyId" id="pondProperty" required></select></label><label class="field"><span>Tipo de estrutura</span><select name="type"><option value="">Selecione</option><option>Viveiro escavado</option><option>Tanque-rede</option><option>Tanque circular</option><option>Tanque revestido</option><option>Outro</option></select></label><label class="field"><span>Espécie cultivada</span><select name="speciesId" id="pondSpecies"><option value="">Selecione se aplicável</option></select></label><label class="field"><span>Volume aproximado</span><div class="input-with-unit"><input name="volume" type="number" min="0.01" step="0.1" placeholder="0"><span>m³</span></div></label><label class="field"><span>Fase de cultivo</span><select name="phase"><option value="">Selecione</option><option value="Alevinagem">Alevinagem</option><option value="Recria">Recria</option><option value="Engorda">Engorda</option><option value="Outra">Outra</option></select></label><label class="field"><span>Sistema de cultivo</span><select name="cultureSystem"><option value="">Selecione</option><option value="semi-intensivo">Semi-intensivo</option><option value="intensivo">Intensivo</option><option value="extensivo">Extensivo</option><option value="recirculação">Recirculação (RAS)</option></select></label><label class="field"><span>Tipo de água</span><select name="waterType"><option value="">Não informado</option><option value="freshwater">Doce</option><option value="brackish">Salobra</option><option value="saltwater">Marinha</option></select></label><label class="field"><span>Salinidade informada</span><div class="input-with-unit"><input name="salinity" type="number" min="0" step="any"><span>ppt</span></div></label></div><div class="form-actions"><span class="required-hint">Nome e propriedade são obrigatórios</span><button class="button button-primary" type="submit">Adicionar estrutura →</button></div></form>
+          <div class="section-title-row"><div><h2>Estruturas cadastradas</h2><p>Dados carregados da sua conta.</p></div><label class="select-wrap"><span class="sr-only">Filtrar por propriedade</span><select id="pondPropertyFilter"><option value="all">Todas as propriedades</option></select></label></div><div class="pond-card-grid" id="pondCards"></div>
+        </section>
+
+        <section class="page-section" id="page-record" data-page="record" aria-labelledby="recordTitle" hidden>
+          <div class="page-heading"><p class="eyebrow">ACOMPANHAMENTO DA ÁGUA</p><h1 id="recordTitle">Registrar medição</h1><p class="page-subtitle">Inclua um parâmetro observado em uma estrutura de cultivo.</p></div>
+          <div class="form-and-aside-grid record-grid"><form class="panel form-panel" id="measurementForm" novalidate><div class="form-heading"><span class="form-step">03</span><div><h2>Nova medição</h2><p>Preencha os dados conforme o instrumento utilizado.</p></div></div><div class="form-grid"><label class="field"><span>Propriedade <b>*</b></span><select name="propertyId" id="measurementProperty" required></select></label><label class="field"><span>Viveiro ou tanque <b>*</b></span><select name="pondId" id="measurementPond" required></select></label><label class="field"><span>Parâmetro <b>*</b></span><select name="parameterId" id="measurementParameter" required></select></label><label class="field"><span>Valor medido <b>*</b></span><div class="input-with-unit"><input name="value" id="measurementValue" type="number" step="any" placeholder="Informe o valor" required><span id="measurementUnit">—</span></div></label><label class="field"><span>Data e hora da coleta <b>*</b></span><input name="measuredAt" id="measurementDate" type="datetime-local" required></label><label class="field field-full"><span>Observações</span><textarea name="notes" rows="3" placeholder="Anote as condições observadas no momento da coleta" maxlength="2000"></textarea></label></div><div class="form-actions"><span class="required-hint">As classificações dependem de referência e contexto compatíveis</span><button class="button button-primary" type="submit">Salvar medição →</button></div></form>
+            <aside class="panel measurement-guide"><span class="guide-icon" aria-hidden="true">⌁</span><h2>Análise contextual</h2><p>Depois de registrar, o sistema compara com uma referência documentada quando espécie, fase, sistema, unidade e condições forem compatíveis.</p><div class="guide-divider"></div><div class="guide-row"><span class="guide-number">1</span><p>Registre pH e temperatura com o mesmo horário da amostra para análise derivada de TAN.</p></div><div class="guide-row"><span class="guide-number">2</span><p>TAN deve estar expresso como mg de N/L para a conversão.</p></div><div class="guide-note"><span>ⓘ</span>Sem os dados ou fonte adequados, a análise permanece sem classificação.</div></aside></div>
+        </section>
+
+        <section class="page-section" id="page-history" data-page="history" aria-labelledby="historyTitle" hidden>
+          <div class="page-heading heading-with-action"><div><p class="eyebrow">ACOMPANHAMENTO</p><h1 id="historyTitle">Histórico de medições</h1><p class="page-subtitle">Consulte e filtre os registros reais da operação.</p></div><button class="button button-primary" type="button" data-go="record"><span class="button-plus">＋</span> Nova medição</button></div>
+          <div class="history-stats"><div class="mini-stat"><span class="mini-stat-icon icon-blue">⌁</span><span><small>REGISTROS VISÍVEIS</small><strong id="historyCount">0</strong></span></div><div class="mini-stat"><span class="mini-stat-icon icon-teal">◷</span><span><small>ÚLTIMO REGISTRO</small><strong id="lastMeasurementLabel">Sem registros</strong></span></div><div class="mini-stat"><span class="mini-stat-icon icon-purple">⌂</span><span><small>ESTRUTURAS COM REGISTRO</small><strong id="historyPondCount">0</strong></span></div></div>
+          <div class="panel history-panel"><div class="history-toolbar"><div><h2>Todos os registros</h2><p>As classificações exibem sua fonte ou o motivo da insuficiência.</p></div><div class="filters"><label class="search-field"><span aria-hidden="true">⌕</span><input type="search" id="historySearch" placeholder="Buscar viveiro..."></label><label class="select-wrap"><span class="sr-only">Filtrar viveiro</span><select id="historyPondFilter"><option value="all">Todos os viveiros</option></select></label><label class="select-wrap"><span class="sr-only">Filtrar parâmetro</span><select id="historyParameterFilter"><option value="all">Todos os parâmetros</option></select></label><label class="field"><span>De</span><input type="date" id="historyFrom"></label><label class="field"><span>Até</span><input type="date" id="historyTo"></label></div></div><div class="table-scroll" role="region" tabindex="0" aria-label="Histórico de medições"><table><caption class="sr-only">Histórico real das medições</caption><thead><tr><th scope="col">PARÂMETRO</th><th scope="col">ESTRUTURA</th><th scope="col">PROPRIEDADE</th><th scope="col">VALOR</th><th scope="col">DATA E HORA</th><th scope="col">OBSERVAÇÃO</th><th scope="col">ANÁLISE E AÇÕES</th></tr></thead><tbody id="historyRows"></tbody></table></div><div class="empty-state" id="historyEmpty" hidden><span>⌕</span><strong>Nenhum registro encontrado</strong><p>Altere os filtros ou registre uma medição.</p></div><div class="table-footer"><span id="historyFooterCount">Carregando…</span><span>Os dados são persistidos no SQLite.</span></div></div>
+        </section>
+
+        <section class="page-section" id="page-reports" data-page="reports" aria-labelledby="reportsTitle" hidden>
+          <div class="page-heading heading-with-action"><div><p class="eyebrow">LEITURA VISUAL DOS DADOS</p><h1 id="reportsTitle">Gráficos e relatórios</h1><p class="page-subtitle">Explore tendências das medições registradas.</p></div><div class="filters"><label class="select-wrap report-range"><span class="sr-only">Período do relatório</span><select id="reportRange"><option value="7">Últimos 7 dias</option><option value="14">Últimos 14 dias</option><option value="30">Últimos 30 dias</option></select></label><label class="select-wrap"><span class="sr-only">Viveiro do relatório</span><select id="reportPondFilter"><option value="all">Todos os viveiros</option></select></label></div></div>
+          <div class="report-disclaimer"><span>ⓘ</span><p>Os gráficos e relatórios são calculados com medições reais da sua conta. Eles não substituem avaliação profissional.</p></div>
+          <div class="reports-grid"><article class="panel report-chart-panel"><div class="panel-heading"><div><h2>Tendência dos parâmetros</h2><p>Série de medições no período selecionado</p></div><label class="select-wrap"><span class="sr-only">Parâmetro do relatório</span><select id="reportParameter"></select></label></div><div class="report-chart-summary"><div><small>ÚLTIMA MEDIÇÃO NO FILTRO</small><strong id="reportValue">Sem medições</strong></div><span class="report-change">Valores registrados</span></div><div class="large-chart-wrap"><canvas id="reportChart" role="img" aria-label="Gráfico do histórico real de parâmetros" aria-describedby="reportChartDescription"></canvas><div class="report-x-labels" id="reportXAxisLabels" aria-hidden="true"></div></div><p class="sr-only" id="reportChartDescription"></p><div class="chart-legend"><span><i class="legend-dot blue-dot"></i><span id="reportLegend">Parâmetro</span></span><small>Dados do banco</small></div></article>
+            <article class="panel report-breakdown"><div class="panel-heading"><div><h2>Registros por parâmetro</h2><p>Distribuição da conta</p></div></div><div class="donut-chart-wrap"><canvas id="distributionChart" role="img" aria-label="Gráfico real de distribuição de registros" aria-describedby="distributionChartDescription"></canvas><p class="sr-only" id="distributionChartDescription"></p><div class="donut-center"><strong>0</strong><span>registros</span></div></div><div class="distribution-legend"></div></article></div>
+          <article class="panel report-table-panel"><div class="panel-heading"><div><h2>Resumo por estrutura</h2><p>Quantidade de registros reais por viveiro</p></div></div><div class="table-scroll" role="region" tabindex="0" aria-label="Resumo por estrutura"><table><caption class="sr-only">Resumo real por estrutura</caption><thead><tr><th scope="col">ESTRUTURA</th><th scope="col">PROPRIEDADE</th><th scope="col">REGISTROS</th><th scope="col">ÚLTIMA ATUALIZAÇÃO</th><th scope="col">OBSERVAÇÃO</th></tr></thead><tbody id="reportRows"></tbody></table></div></article>
+        </section>
+
+        <section class="page-section" id="page-settings" data-page="settings" aria-labelledby="settingsTitle" hidden>
+          <div class="page-heading"><p class="eyebrow">CONTA E PREFERÊNCIAS</p><h1 id="settingsTitle">Configurações</h1><p class="page-subtitle">Consulte sua conta e preferências da interface.</p></div>
+          <div class="settings-layout"><nav class="settings-tabs" aria-label="Seções das configurações"><a class="settings-tab active" href="#settings-general" data-settings-tab="general"><span>⚙</span> Geral</a><a class="settings-tab" href="#settings-notifications" data-settings-tab="notifications"><span>♧</span> Notificações</a><a class="settings-tab" href="#settings-display" data-settings-tab="display"><span>◐</span> Exibição</a></nav>
+            <div class="settings-content"><section class="panel settings-card" id="settings-general"><div class="settings-card-heading"><div class="settings-symbol symbol-blue">⌂</div><div><h2>Conta</h2><p>Dados da sessão autenticada.</p></div></div><div class="settings-fields"><p id="accountDetails">Conta autenticada</p><p>As propriedades e medições exibidas são privadas desta conta.</p></div></section>
+              <section class="panel settings-card" id="settings-notifications"><div class="settings-card-heading"><div class="settings-symbol symbol-orange">♧</div><div><h2>Notificações</h2><p>Preferências demonstrativas; alertas não são enviados nem persistidos.</p></div></div><div class="setting-row"><div><strong>Lembretes de medição</strong><p>Preferência visual sem agendamento.</p></div><label class="switch"><input type="checkbox"><span></span><b class="sr-only">Ativar lembretes de medição</b></label></div><div class="setting-row"><div><strong>Resumo semanal</strong><p>Preferência visual sem envio automático.</p></div><label class="switch"><input type="checkbox"><span></span><b class="sr-only">Ativar resumo semanal</b></label></div></section>
+              <section class="panel settings-card" id="settings-display"><div class="settings-card-heading"><div class="settings-symbol symbol-violet">◐</div><div><h2>Exibição dos dados</h2><p>Essas preferências são demonstrativas e não são persistidas.</p></div></div><div class="settings-fields"><label class="field"><span>Unidade de temperatura</span><select><option>Celsius (°C)</option><option>Fahrenheit (°F)</option></select></label><label class="field"><span>Formato de data</span><select><option>DD/MM/AAAA</option><option>AAAA-MM-DD</option></select></label></div></section>
+              <div class="settings-save-row"><span id="settingsSaveMessage" aria-live="polite"></span><button class="button button-primary" id="saveSettingsButton" type="button">Salvar preferências</button></div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="app-footer"><span>© 2026 AquaManejo</span><span>Dados privados da conta autenticada</span></footer>
+      </div>
+    </main>
+    <dialog class="analysis-dialog" id="analysisDialog" aria-labelledby="analysisDialogTitle">
+      <div class="analysis-dialog-heading"><div><p class="eyebrow">ANÁLISE RASTREÁVEL</p><h2 id="analysisDialogTitle">Resultado</h2></div><button class="notice-close" id="closeAnalysisDialog" type="button" aria-label="Fechar análise">×</button></div>
+      <p id="analysisExplanation"></p><dl class="analysis-source"><dt>Referência utilizada</dt><dd id="analysisReference">Nenhuma referência aplicada</dd><dt>Fonte e versão</dt><dd id="analysisVersion">—</dd><dt>Valor analisado</dt><dd id="analysisValue">—</dd><dt>Contexto registrado</dt><dd id="analysisContext">—</dd><dt>Data da análise</dt><dd id="analysisDate">—</dd></dl>
+      <p class="report-disclaimer">A classificação é informativa, limitada à referência exibida e não substitui avaliação profissional.</p>
+    </dialog>
+    <div class="toast" id="toast" role="status" aria-live="polite"><span class="toast-check">✓</span><span id="toastMessage">Registro adicionado</span></div>
+  </div>
+</body>
+</html>

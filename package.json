@@ -1,0 +1,38 @@
+{
+  "name": "aquamanejo",
+  "version": "1.0.0",
+  "description": "Aplicativo web AquaManejo para gestão aquícola, medições e análise rastreável da qualidade da água.",
+  "main": "backend/src/server.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "node --watch backend/src/server.js",
+    "test": "node --test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Vinicius-Libardi/AquaManejo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Vinicius-Libardi/AquaManejo/issues"
+  },
+  "homepage": "https://github.com/Vinicius-Libardi/AquaManejo#readme",
+  "dependencies": {
+    "better-sqlite3": "^13.2.0",
+    "cors": "^2.8.6",
+    "express": "^5.3.0",
+    "zod": "^4.6.7"
+  },
+  "allowScripts": {
+    "better-sqlite3@13.2.0": true
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
